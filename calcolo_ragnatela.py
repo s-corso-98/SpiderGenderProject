@@ -14,6 +14,7 @@ import argparse
 import imutils
 import dlib
 import cv2
+import numpy
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
@@ -257,6 +258,8 @@ for img in immagini:
 print("dizionario = ", dizionario)
 print("dizionario_str = ", dizionario_str)
 
+#print(type(dizionario))
+#numpy.savetxt("foo.csv", dizionario, delimiter=",")
 
 
 #cv2.imwrite("gen_settore.jpg", imga)
