@@ -145,16 +145,16 @@ def aggiungi(xcentro, ycentro, rax, xpunto, ypunto, distNaso, coeff, immm):
     return indice
 
 
-immagini = os.listdir('Lara')
+immagini = os.listdir('DatasetCelebA')
 
 num_volto = 0
 
 for img in immagini:
-    if img.find(".png") > 0:
+    if img.find(".jpg") > 0:
 
         tick_detector = time.time()
 
-        im2 = "Lara/"+str(img)
+        im2 = "DatasetCelebA/"+str(img)
 
         foto = cv2.imread(im2)
 
@@ -259,9 +259,8 @@ print("dizionario_str = ", dizionario_str)
 
 
 
-#cv2.imwrite("gen_settore.png", imga)
-
-# cv2.imshow('image',imga)
+#cv2.imwrite("gen_settore.jpg", imga)
+#cv2.imshow('image',imga)
 
 #cv2.waitKey(0)
 #cv2.destroyAllWindows()
