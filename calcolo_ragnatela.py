@@ -256,7 +256,9 @@ for img in immagini:
 
 
 print("dizionario = ", dizionario)
+print(len(dizionario))
 print("dizionario_str = ", dizionario_str)
+print(len(dizionario_str))
 
 #print(type(dizionario))
 #numpy.savetxt("foo.csv", dizionario, delimiter=",")
