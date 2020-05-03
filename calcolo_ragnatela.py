@@ -263,6 +263,7 @@ print(len(dizionario_str))
 #print(type(dizionario))
 #numpy.savetxt("foo.csv", dizionario, delimiter=",")
 
+numpy.savetxt("datasetLandmarks.csv", dizionario, fmt='%i', delimiter=",")
 
 #cv2.imwrite("gen_settore.jpg", imga)
 #cv2.imshow('image',imga)
