@@ -16,9 +16,13 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 
+
+#Prova generale con 20 foto, lo si estende a tutto il dataset una volta
+#raffinato il codice
+
 #caricamento dei due dataset
-dataset = pd.read_csv("dataset.csv",header=None)
-feature = pd.read_csv("list_attr_celeba.csv")
+dataset = pd.read_csv("DatasetCelebA/dataset4c4s.csv",header=None)#modificare nome dataset in base alla configurazione scelta
+feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
 #print (dataset.shape)
 #print (type(dataset))
@@ -73,9 +77,12 @@ print(y_test.shape)
 
 #Creazione del classificatore, presi dal tutorial anche gli altri in caso di altre prove
 
-classifier = svm.SVC(gamma=0.001) #  a support vector classifier
+#classifier = svm.SVC(gamma=0.001)
 #classifier = KNeighborsClassifier(3)
-#classifier = SVC(kernel="linear", C=0.025)
+
+#classifier = SVC(kernel="linear", C=10)
+classifier = SVC(kernel='rbf', random_state=0, gamma=.01, C=1000) #al variare di gamma e C
+
 #classifier = SVC(gamma=2, C=1)
 #classifier = GaussianProcessClassifier(1.0 * RBF(1.0))
 #classifier = DecisionTreeClassifier(max_depth=5)
@@ -95,16 +102,22 @@ predicted = classifier.predict(X_test)
 print(predicted.shape)
 print(y_test.shape)
 
+labels = ("Female","Male")
+positions = (0,1)
+
 #Stampa dei risultati
 print("Classification report for classifier %s:\n%s\n"
       % (classifier, metrics.classification_report(y_test, predicted)))
 disp = metrics.plot_confusion_matrix(classifier, X_test, y_test)
-disp.figure_.suptitle("Confusion Matrix")
+#disp.figure_.suptitle("Confusion Matrix")
 print("Confusion matrix:\n%s" % disp.confusion_matrix)
 #Stampa a video
+plt.xticks(positions,labels)
+plt.yticks(positions,labels)
+plt.title("Confusion Matrix")
 plt.show()
-
 
 # Accuratezza
 from sklearn.metrics import accuracy_score
+print("Accuratezza: ")
 print(accuracy_score(y_test, predicted))
