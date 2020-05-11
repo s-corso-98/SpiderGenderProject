@@ -46,11 +46,13 @@ s1 = cerchi * fette
 
 #dizionario = np.zeros((2223, s1))
 
-dizionario = [ [ 0 for y in range(s1)] for x in range(2230)]
+#modificare il range per cambiare il numero di foto da processare
+dizionario = [ [ 0 for y in range(s1)] for x in range(100)]
     #x = width
     #y = height
 
-dizionario_str = ['' for xx in range(2230)]
+#modificare il range per cambiare il numero di foto da processare
+dizionario_str = ['' for xx in range(100)]
 
 volto = np.zeros(s1)
 
@@ -145,7 +147,7 @@ def aggiungi(xcentro, ycentro, rax, xpunto, ypunto, distNaso, coeff, immm):
 
     return indice
 
-
+#Cambiare il percorso relativo al dataset delle img
 immagini = os.listdir('DatasetCelebA')
 
 num_volto = 0
@@ -155,6 +157,7 @@ for img in immagini:
 
         tick_detector = time.time()
 
+#Cambiare il percorso relativo al dataset delle img
         im2 = "DatasetCelebA/"+str(img)
 
         foto = cv2.imread(im2)
