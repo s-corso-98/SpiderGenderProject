@@ -4,41 +4,64 @@ from sklearn import tree
 import pydotplus
 from IPython.display import Image
 from IPython.display import display
-#caricamento dei due dataset
-dataset = pd.read_csv("DatasetCelebA/dataset4c4s.csv",header=None)
+from sklearn.model_selection import train_test_split # Import train_test_split function
+from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
+
+
+#Caricamento dei due dataset
+dataframe = pd.read_csv("DatasetCelebA/dataset4c4s.csv",header=None)
 feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
 
-dataframe = dataset.iloc[0:100, 0:64]
 print(dataframe)
 
 
-#prendo la colonna delle features riguardante il sesso
+#Prendo la colonna delle features riguardante il sesso
 feat = feature.iloc[0:100,21]
 df_X = pd.DataFrame(feat)
 
+#Assegno dei nomi a ciascuna colonna del dataframe assegnandogli inoltre solo valori pari a 0 o 1 (utile per il decision tree, il numero delle colonne aumenta)
+#one_hot_data = pd.get_dummies(dataframe.astype(str))
 
-one_hot_data = pd.get_dummies(dataframe.astype(str))
-
-#rinonimo la colonna da Male a Gender
+#Rinonimo la colonna da Male a Gender
 rename = df_X.rename(columns={"Male" : "Gender"}) #-1 donna e 1 maschio
 
 #Concateno i due dataframe per crearne uno
-dfconc = pd.concat([one_hot_data, rename], axis=1, sort=False)
+dfconc = pd.concat([dataframe, rename], axis=1, sort=False)
 print(dfconc)
 
-# The decision tree classifier
+#Ottengo feature variables
+feature_cols = list(dfconc.columns.values)
+X = feature_cols[1:len(feature_cols)-1]
+X = dfconc[X]
+print("X:",X)
+
+#Ottengo target variables
+y = dfconc.Gender
+print("y:",y)
+
+#Divido il dataframe in train e test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
+
+#The decision tree classifier
 clf = tree.DecisionTreeClassifier()
-#Training the Decision Tree
-clf_train = clf.fit(dfconc, dfconc["Gender"])
 
-# Export/Print a decision tree in DOT format.
-print(tree.export_graphviz(clf_train, None))
-#Create Dot Data
-dot_data = tree.export_graphviz(clf_train, out_file=None, feature_names=list(dfconc.columns.values),
+#Alleno il decision tree
+clf_train = clf.fit(X_train, y_train)
+
+#Predico la risposta per il dataset
+y_pred = clf.predict(X_test)
+
+#Model Accuracy, valuto il modello
+print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+#Stampo un decision tree in formato DOT.
+#print(tree.export_graphviz(clf_train, None))
+
+#Creo un decision tree in formato DOT utilizzando GraphViz
+dot_data = tree.export_graphviz(clf_train, out_file=None, feature_names=X_train.columns.values,
                                 class_names=['Female', 'Male'], rounded=True, filled=True) #Gini decides which attribute/feature should be placed at the root node, which features will act as internal nodes or leaf nodes
-#Create Graph from DOT data
+#Creo il decision tree in formato Graph partendo dal formato DOT
 graph = pydotplus.graph_from_dot_data(dot_data)
-
-# Show graph
+#Salvo in png il decision tree creato
 test2 = graph.write_png("hallo.png");
