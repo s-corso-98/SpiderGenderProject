@@ -24,8 +24,8 @@ import time
 start_time = time.time()
 
 #caricamento dei due dataset
-dataset = pd.read_csv("dataset.csv",header=None)
-feature = pd.read_csv("list_attr_celeba.csv")
+dataset = pd.read_csv("DatasetCelebA/dataset4c3s.csv",header=None)
+feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
 num_righe=3000
 
@@ -107,8 +107,8 @@ classifier.fit(X_train, y_train)
 # E ora si predice sul Test Set
 predicted = classifier.predict(X_test)
 
-print(predicted)
-print(y_test)
+#print(predicted)
+#print(y_test)
 
 labels = ("Female","Male")
 positions = (0,1)
