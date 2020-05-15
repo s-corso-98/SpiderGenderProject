@@ -13,11 +13,8 @@ dataframe = pd.read_csv("DatasetCelebA/dataset4c4s.csv",header=None)
 feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
 
-print(dataframe)
-
-
 #Prendo la colonna delle features riguardante il sesso
-feat = feature.iloc[0:100,21]
+feat = feature.iloc[0:202599,21]
 df_X = pd.DataFrame(feat)
 
 #Assegno dei nomi a ciascuna colonna del dataframe assegnandogli inoltre solo valori pari a 0 o 1 (utile per il decision tree, il numero delle colonne aumenta)
@@ -28,17 +25,14 @@ rename = df_X.rename(columns={"Male" : "Gender"}) #-1 donna e 1 maschio
 
 #Concateno i due dataframe per crearne uno
 dfconc = pd.concat([dataframe, rename], axis=1, sort=False)
-print(dfconc)
 
 #Ottengo feature variables
 feature_cols = list(dfconc.columns.values)
 X = feature_cols[1:len(feature_cols)-1]
 X = dfconc[X]
-print("X:",X)
 
 #Ottengo target variables
 y = dfconc.Gender
-print("y:",y)
 
 #Divido il dataframe in train e test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
