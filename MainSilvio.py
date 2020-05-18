@@ -9,7 +9,7 @@ from sklearn import metrics #Import scikit-learn metrics module for accuracy cal
 
 
 #Caricamento dei due dataset
-dataframe = pd.read_csv("DatasetCelebA/dataset4c4s.csv",header=None)
+dataframe = pd.read_csv("DatasetCelebA/dataset5c4s.csv",header=None)
 feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
 
@@ -38,7 +38,7 @@ y = dfconc.Gender
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
 
 #The decision tree classifier
-clf = tree.DecisionTreeClassifier()
+clf = tree.DecisionTreeClassifier(criterion = "entropy", max_depth=8)
 
 #Alleno il decision tree
 clf_train = clf.fit(X_train, y_train)
@@ -58,4 +58,4 @@ dot_data = tree.export_graphviz(clf_train, out_file=None, feature_names=X_train.
 #Creo il decision tree in formato Graph partendo dal formato DOT
 graph = pydotplus.graph_from_dot_data(dot_data)
 #Salvo in png il decision tree creato
-test2 = graph.write_png("hallo.png");
+test2 = graph.write_png("OutputDT/GraphDecisionTree.png");
