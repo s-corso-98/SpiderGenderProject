@@ -12,14 +12,14 @@ start_time = time.time()
 
 
 #Caricamento dei due dataset
-dataframe = pd.read_csv("DatasetCelebA/set5c4s.csv", header=None)
+dataframe = pd.read_csv("DatasetCelebA/dataset4c3s.csv", header=None)
 feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
 
-print(dataframe)
+#print(dataframe)
 
 #Prendo la colonna delle features riguardante il sesso
-feat = feature.iloc[0:100,21]
+feat = feature.iloc[0:202599,21]
 df_X = pd.DataFrame(feat)
 
 #Rinonimo la colonna da Male a Gender
@@ -43,7 +43,7 @@ print("y:",y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
 
 #NearestNeighbors classifier
-classifier = KNeighborsClassifier(n_neighbors=5)
+classifier = KNeighborsClassifier(n_neighbors=10)
 
 #Alleno il classificatore
 clf_train = classifier.fit(X_train, y_train)
@@ -69,7 +69,7 @@ print("Confusion matrix:\n%s" % disp.confusion_matrix)
 #Stampa a video
 plt.xticks(positions,labels)
 plt.yticks(positions,labels)
-plt.savefig('ConfusionMatrix5c4s.png', bbox_inches='tight')
+plt.savefig('OutputKNN/ConfusionMatrix4c3s_n10.png', bbox_inches='tight')
 plt.show()
 
 
