@@ -11,7 +11,7 @@ dataset = pd.read_csv("DatasetCelebA/dataset4c3s.csv",header=None)
 feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
 #Imposto il numero di righe
-num_righe=50
+num_righe=202599
 
 #Salvo in datafram le prime 100 righe di dataset
 dataframe = dataset.iloc[0:num_righe, 0:48]
