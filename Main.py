@@ -108,13 +108,37 @@ def MyNearestNeighbors():
     plt.savefig('OutputKNN/ConfusionMatrix4c4s_n9.png', bbox_inches='tight')
     plt.show()
 
+#Creo dataset bilanciato
+def CreateBalanced4c4s(dfconc):
+    #Creo un csv corrispondente al dataset4c4s ma con l'aggiunta della colonna "Gender"
+    dfconc.to_csv("DatasetCelebA/Dataset4c4sBalanced.csv", header = False, index = False)
+    #Leggo il csv appena creato per andare ad eseguire le operazioni di manipolazione
+    DFbalanced = pd.read_csv("DatasetCelebA/Dataset4c4sBalanced.csv",header = None)
+
+    #Salvo in un dataframe tutte le righe con gender pari a 1(uomo)
+    dfBalanceM = DFbalanced.loc[DFbalanced[64] == 1]
+    #Salvo in un dataframe tutte le righe con gender pari a -1(donna)
+    dfBalanceF = DFbalanced.loc[DFbalanced[64] == -1]
+
+    #Droppo le righe in eccesso del dataframe femminile (rispetto al dataframe maschile)
+    dfBalanceF = dfBalanceF.iloc[0:84434]
+
+    #Unisco i due dataframe aventi lo stesso numero di elementi
+    DFbalanced = pd.concat([dfBalanceM,dfBalanceF], axis = 0)
+
+    #Droppo la colonna "Gender" così da poter rispettare il formato dei csv fino ad ora costruiti
+    DFbalanced = DFbalanced.drop(DFbalanced.columns[64],1)
+    #Creo il csv corrispondente
+    DFbalanced.to_csv("DatasetCelebA/Dataset4c4sBalanced.csv", header = False, index = False)
+
+
 
 start_time = time.time()
+
 
 #Caricamento dei due dataset
 dataframe = pd.read_csv("DatasetCelebA/dataset4c4s.csv",header=None)
 feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
-
 
 #Prendo la colonna delle features riguardante il sesso
 feat = feature.iloc[0:202599,21]
@@ -125,6 +149,13 @@ rename = df_X.rename(columns={"Male" : "Gender"}) #-1 donna e 1 maschio
 
 #Concateno i due dataframe per crearne uno
 dfconc = pd.concat([dataframe, rename], axis=1, sort=False)
+
+#Eseguo questa funzione solo se c'è bisogno di creare nuovamente il dataset bilanciato. In seguito basta cambiare solo
+#il path del csv che viene creato nella variabile "dataframe" e rieseguire il codice, commentando la funzione sottostante
+#CreateBalanced4c4s(dfconc)
+
+
+
 
 #Ottengo feature variables
 feature_cols = list(dfconc.columns.values)
@@ -138,6 +169,6 @@ y = dfconc.Gender
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
 
 #Esecuzione classificatori
-MyDecisionTree()
-MyNearestNeighbors()
-MySupportVectorMachine()
+#MyDecisionTree()
+#MyNearestNeighbors()
+#MySupportVectorMachine()
