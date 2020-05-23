@@ -55,7 +55,7 @@ def MySupportVectorMachine():
 
 def MyDecisionTree():
     #The decision tree classifier
-    clf = tree.DecisionTreeClassifier(criterion = "gini", max_depth=13)
+    clf = tree.DecisionTreeClassifier(criterion = "gini", max_depth=5)
 
     #Alleno il decision tree
     clf_train = clf.fit(X_train, y_train)
@@ -74,6 +74,7 @@ def MyDecisionTree():
     graph = pydotplus.graph_from_dot_data(dot_data)
     #Salvo in png il decision tree creato
     test2 = graph.write_png("OutputDT/GraphDecisionTree.png")
+
 
 
 
@@ -108,7 +109,10 @@ def MyNearestNeighbors():
     plt.savefig('OutputKNN/ConfusionMatrix4c4s_n9.png', bbox_inches='tight')
     plt.show()
 
-#Creo dataset bilanciato
+
+
+
+#Funzione creazione dataset bilanciato
 def CreateBalanced4c4s(dfconc):
     #Creo un csv corrispondente al dataset4c4s ma con l'aggiunta della colonna "Gender"
     dfconc.to_csv("DatasetCelebA/Dataset4c4sBalanced.csv", header = False, index = False)
@@ -126,49 +130,85 @@ def CreateBalanced4c4s(dfconc):
     #Unisco i due dataframe aventi lo stesso numero di elementi
     DFbalanced = pd.concat([dfBalanceM,dfBalanceF], axis = 0)
 
-    #Droppo la colonna "Gender" così da poter rispettare il formato dei csv fino ad ora costruiti
-    DFbalanced = DFbalanced.drop(DFbalanced.columns[64],1)
     #Creo il csv corrispondente
     DFbalanced.to_csv("DatasetCelebA/Dataset4c4sBalanced.csv", header = False, index = False)
 
 
 
+
+#Funzione per suddividere il dataset bilanciato in train e test set
+def ExecOnBalanced():
+    #Leggo dataset bilanciato
+    dataframe = pd.read_csv("DatasetCelebA/dataset4c4sBalanced.csv", header=None)
+
+    #Rinomino la colonna 64 in Gender.
+    dataframe = dataframe.rename(columns={dataframe.columns[64]: "Gender"})  # -1 donna e 1 maschio
+
+    #Ottengo feature variables
+    feature_cols = list(dataframe.columns.values)
+    X = feature_cols[1:len(feature_cols) - 1]
+    X = dataframe[X]
+
+    #Ottengo target variables
+    y = dataframe.Gender
+
+    #Divido il dataframe in train e test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,random_state=1)  # 70% training and 30% test
+    return X_train,X_test,y_train,y_test
+
+
+
+
+
+
+#Funzione lettura CSV su cui eseguire i test
+def ReadCSV():
+    # Caricamento dei due dataset
+    dataframe = pd.read_csv("DatasetCelebA/dataset4c4s.csv", header=None)
+    feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
+
+    # Prendo la colonna delle features riguardante il sesso.
+    feat = feature.iloc[0:202599, 21]
+    df_X = pd.DataFrame(feat)
+
+    # Rinonimo la colonna da Male a Gender.
+    rename = df_X.rename(columns={"Male": "Gender"})  # -1 donna e 1 maschio
+
+    # Concateno i due dataframe per crearne uno. Non necessario per il dataset bilanciato
+    dfconc = pd.concat([dataframe, rename], axis=1, sort=False)
+    return dfconc
+
+
+
+
+
+#Ottengo l'orario corrente per andare a calcolare il tempo di esecuzione totale di ciascun classificatore
 start_time = time.time()
 
+choice = input("Digita 1 se vuoi eseguire i test sul dataset bilanciato, 0 altrimenti.\n")
+if choice == "1":
+    #Eseguo la funzione per leggere il dataset di interesse per i test. In questo caso serve a creare il dataset bilanciato
+    dfconc = ReadCSV()
+    #Eseguo la funziona per creare il dataset bilanciato 4c4s
+    CreateBalanced4c4s(dfconc)
+    #Salvo nelle variabili il dataframe diviso in train e test set. In modo da potere poi passare ai classificatori
+    X_train, X_test, y_train, y_test = ExecOnBalanced()
+else:
+    #Eseguo la funzione per leggere il dataset di interesse per i test
+    dfconc = ReadCSV()
 
-#Caricamento dei due dataset
-dataframe = pd.read_csv("DatasetCelebA/dataset4c4s.csv",header=None)
-feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
+    #Ottengo feature variables
+    feature_cols = list(dfconc.columns.values)
+    X = feature_cols[1:len(feature_cols)-1]
+    X = dfconc[X]
 
-#Prendo la colonna delle features riguardante il sesso
-feat = feature.iloc[0:202599,21]
-df_X = pd.DataFrame(feat)
+    #Ottengo target variables
+    y = dfconc.Gender
 
-#Rinonimo la colonna da Male a Gender
-rename = df_X.rename(columns={"Male" : "Gender"}) #-1 donna e 1 maschio
-
-#Concateno i due dataframe per crearne uno
-dfconc = pd.concat([dataframe, rename], axis=1, sort=False)
-
-#Eseguo questa funzione solo se c'è bisogno di creare nuovamente il dataset bilanciato. In seguito basta cambiare solo
-#il path del csv che viene creato nella variabile "dataframe" e rieseguire il codice, commentando la funzione sottostante
-#CreateBalanced4c4s(dfconc)
-
-
-
-
-#Ottengo feature variables
-feature_cols = list(dfconc.columns.values)
-X = feature_cols[1:len(feature_cols)-1]
-X = dfconc[X]
-
-#Ottengo target variables
-y = dfconc.Gender
-
-#Divido il dataframe in train e test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
+    #Divido il dataframe in train e test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
 
 #Esecuzione classificatori
-#MyDecisionTree()
+MyDecisionTree()
 #MyNearestNeighbors()
 #MySupportVectorMachine()
