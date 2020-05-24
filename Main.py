@@ -55,7 +55,7 @@ def MySupportVectorMachine():
 
 def MyDecisionTree():
     #The decision tree classifier
-    clf = tree.DecisionTreeClassifier(criterion = "gini", max_depth=5)
+    clf = tree.DecisionTreeClassifier(criterion = "gini", max_depth= 13)
 
     #Alleno il decision tree
     clf_train = clf.fit(X_train, y_train)
@@ -65,7 +65,6 @@ def MyDecisionTree():
 
     #Model Accuracy, valuto il modello
     print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
-    print ("\nTempo trascorso: {:.2f}m\n".format((time.time()-start_time)/60))
 
     #Creo un decision tree in formato DOT utilizzando GraphViz
     dot_data = tree.export_graphviz(clf_train, out_file=None, feature_names=X_train.columns.values,
@@ -74,6 +73,7 @@ def MyDecisionTree():
     graph = pydotplus.graph_from_dot_data(dot_data)
     #Salvo in png il decision tree creato
     test2 = graph.write_png("OutputDT/GraphDecisionTree.png")
+    print ("\nTempo trascorso: {:.2f}m\n".format((time.time()-start_time)/60))
 
 
 
