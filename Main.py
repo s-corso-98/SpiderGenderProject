@@ -164,11 +164,11 @@ def ExecOnBalanced():
 #Funzione lettura CSV su cui eseguire i test
 def ReadCSV():
     # Caricamento dei due dataset
-    dataframe = pd.read_csv("DatasetCelebA/dataset4c4s.csv", header=None)
+    dataframe = pd.read_csv("DatasetCelebA/dataset4c4s1000.csv", header=None)
     feature = pd.read_csv("DatasetCelebA/list_attr_celeba.csv")
 
     # Prendo la colonna delle features riguardante il sesso.
-    feat = feature.iloc[0:202599, 21]
+    feat = feature.iloc[0:1000, 21]
     df_X = pd.DataFrame(feat)
 
     # Rinonimo la colonna da Male a Gender.

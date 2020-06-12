@@ -47,12 +47,12 @@ s1 = cerchi * fette
 #dizionario = np.zeros((2223, s1))
 
 #modificare il range per cambiare il numero di foto da processare
-dizionario = [ [ 0 for y in range(s1)] for x in range(202599)]
+dizionario = [ [ 0 for y in range(s1)] for x in range(1000)]
     #x = width
     #y = height
 
 #modificare il range per cambiare il numero di foto da processare
-dizionario_str = ['' for xx in range(202599)]
+dizionario_str = ['' for xx in range(1000)]
 
 volto = np.zeros(s1)
 
@@ -148,7 +148,7 @@ def aggiungi(xcentro, ycentro, rax, xpunto, ypunto, distNaso, coeff, immm):
     return indice
 
 #Cambiare il percorso relativo al dataset delle img
-immagini = os.listdir('C:/Users/Administrator/Desktop/CelebA/img_align_celeba/img_align_celeba')
+immagini = os.listdir('Dataset1000')
 
 num_volto = 0
 
@@ -158,7 +158,7 @@ for img in immagini:
         tick_detector = time.time()
 
 #Cambiare il percorso relativo al dataset delle img
-        im2 = "C:/Users/Administrator/Desktop/CelebA/img_align_celeba/img_align_celeba/"+str(img)
+        im2 = "Dataset1000/"+str(img)
 
         foto = cv2.imread(im2)
 
@@ -267,7 +267,7 @@ for img in immagini:
 #numpy.savetxt("foo.csv", dizionario, delimiter=",")
 
 #Modificare il nome in base alla configurazione scelta
-numpy.savetxt("DatasetCelebA/dataset4c4s.csv", dizionario, fmt='%i', delimiter=",")
+numpy.savetxt("DatasetCelebA/dataset4c4s1000.csv", dizionario, fmt='%i', delimiter=",")
 
 #cv2.imwrite("gen_settore.jpg", imga)
 #cv2.imshow('image',imga)
